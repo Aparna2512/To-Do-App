@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: "templates\images.jpeg";
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        .card-header {
+            background-color: #007bff;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-body {
+            padding: 30px;
+            border-radius: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-control {
+            border-radius: 20px;
+        }
+
+        .list-group-item {
+            border-radius: 20px;
+            margin-top: 10px;
+        }
+
+        .btn-danger,
+        .btn-success {
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title">To-Do List</h1>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="/">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" name="task" placeholder="Enter a task">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="submit">Add Task</button>
+                        </div>
+                    </div>
+                </form>
+                <ul class="list-group">
+                    {% for task_id, task in tasks_with_index %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="completed{{ task_id }}"
+                                    {% if task['completed'] %} checked {% endif %} onchange="completeTask({{ task_id }})">
+                                <label class="form-check-label {{ 'text-decoration-line-through' if task['completed'] else '' }}"
+                                    for="completed{{ task_id }}">{{ task['name'] }}</label>
+                            </div>
+                            <a href="/delete/{{ task_id }}" class="btn btn-danger">Delete</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function completeTask(taskId) {
+            var checkbox = document.getElementById('completed' + taskId);
+            if (checkbox.checked) {
+                var taskName = checkbox.labels[0].textContent;
+                alert('Task Completed: ' + taskName);
+            }
+        }
+    </script>
+</body>
+</html>
